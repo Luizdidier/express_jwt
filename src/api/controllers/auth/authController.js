@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const authConfig = require('../../../config/auth')
 
 const _generateToken = (params = {}) => {
-    return jwt.sign(params, authConfig.secret, { expiresIn: 86400 })
+    return jwt.sign(params, authConfig.secret, { expiresIn: 100 })
 }
 
 const registerUser = async (req, res, next) => {
