@@ -1,4 +1,4 @@
-const { getClienteByCnpj, createCliente, createVenda } = require('./vendasDb')
+const { getClienteByCnpj, createCliente, createVenda, getAllVendas} = require('./vendasDb')
 const _ = require('lodash')
 
 const sendVenda = async (req, res, next) => {
@@ -20,4 +20,19 @@ const sendVenda = async (req, res, next) => {
     }
 }
 
-module.exports = { sendVenda }
+const getVendas = async (req, res) => {
+    try{
+        const data = { data : await getAllVendas() } 
+
+        if(_.isEmpty(data.data))
+            return res.status(404).send({data: 'Not Found !'})
+
+        return res.status(200).send(data)
+    } catch(err) {
+        console.log(err)
+        res.status(400).send({error: 'Some wrong request'})
+        next()
+    }
+}
+
+module.exports = { sendVenda, getVendas }

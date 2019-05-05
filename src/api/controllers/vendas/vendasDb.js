@@ -43,9 +43,14 @@ const createVenda = (obj, cliente_id) => {
             })
 }
 
+const getAllVendas = () => {
+    return knex('Vendas')
+           .innerJoin('Clientes', 'Vendas.cliente_id', 'Clientes.id')
+}
 
 module.exports = {
     getClienteByCnpj,
     createCliente,
-    createVenda  
+    createVenda,
+    getAllVendas  
 }
