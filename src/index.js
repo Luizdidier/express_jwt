@@ -12,7 +12,6 @@ app.use(bodyParser.urlencoded({extended: false}))
 const corsOptions = {
     origin: '*'
 };
-app
 
 app.use(cors(corsOptions))
 app.use('/auth', authRouter)
