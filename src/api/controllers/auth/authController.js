@@ -44,7 +44,12 @@ const authUser = async (req, res) => {
     }
 }
 
+const verifyToken = async (req, res) => {
+   return res.status(200).send({message: "Token Valid !"})
+}
+
 module.exports = {
     registerUser,
-    authUser
+    authUser,
+    verifyToken
 }
