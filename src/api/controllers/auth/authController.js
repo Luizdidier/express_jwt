@@ -1,7 +1,8 @@
-const User = require('../../../models/User')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const authConfig = require('../../../config/auth')
+const _ = require('lodash')
+const { findUserByEmail, createUser } = require('./authDb')
 
 const _generateToken = (params = {}) => {
     return jwt.sign(params, authConfig.secret, { expiresIn: 100 })
@@ -11,13 +12,14 @@ const registerUser = async (req, res, next) => {
     const { email } = req.body
    try {
 
-    if(await User.findOne({email}))
+    if(await findUserByEmail(email))
         return res.status(400).send({error: "User already exists"})
 
-    const user = await User.create(req.body)
-    user.password = undefined
+    const user = await createUser(req.body)
 
-    return res.send( {user, token: _generateToken({ id: user.id, name: user.name, email: user.email })} )
+    console.log(user)
+
+    return res.send( {user: user, token: _generateToken({ id: user.id, name: user.name, email: user.email })} )
    } catch (err) {
        console.log(err)
        res.status(400).send({error: 'Registration failed'})
@@ -29,18 +31,19 @@ const authUser = async (req, res, next) => {
     try {
         const { email, password } = req.body
 
-        const user = await User.findOne({ email }).select('+password')
+        const user = await findUserByEmail(email)
 
-        if(!user)
-            res.status(400).send({error: 'User not found'})
+        if(_.isUndefined(user))
+            return res.status(400).send({error: 'User not found'})
 
         if(!await bcrypt.compare(password, user.password))
-            res.status(400).send({error: 'Invalid password'})
+            return res.status(400).send({error: 'Invalid password'})
 
         user.password = undefined
 
         res.send({user, token: _generateToken({ id: user.id, name: user.name, email: user.email })})
     } catch(err) {
+        console.log(err)
         res.status(400).send({error: 'Some wrong request'})
         next()
     }
