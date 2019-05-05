@@ -9,7 +9,12 @@ const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
-app.use(cors())
+const corsOptions = {
+    origin: '*'
+};
+app
+
+app.use(cors(corsOptions))
 app.use('/auth', authRouter)
 app.use('/simple', simpleRouter)
 
