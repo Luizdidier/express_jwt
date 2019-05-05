@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const { firstRoute } = require('./simpleController')
+const { sendVenda } = require('./vendasController')
 const authMiddleware = require('../../middleware/auth')
 
-router.get('/project', authMiddleware, firstRoute)
+router.post('/create/venda', authMiddleware ,sendVenda)
 
 module.exports = router

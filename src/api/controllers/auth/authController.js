@@ -8,26 +8,22 @@ const _generateToken = (params = {}) => {
     return jwt.sign(params, authConfig.secret, { expiresIn: 100 })
 }
 
-const registerUser = async (req, res, next) => {
+const registerUser = async (req, res) => {
     const { email } = req.body
    try {
 
-    if(await findUserByEmail(email))
-        return res.status(400).send({error: "User already exists"})
+        if(await findUserByEmail(email))
+            return res.status(400).send({error: "User already exists"})
 
-    const user = await createUser(req.body)
+        const user = await createUser(req.body)
 
-    console.log(user)
-
-    return res.send( {user: user, token: _generateToken({ id: user.id, name: user.name, email: user.email })} )
+        return res.send( {user: user, token: _generateToken({ id: user.id, name: user.name, email: user.email })} )
    } catch (err) {
-       console.log(err)
-       res.status(400).send({error: 'Registration failed'})
-       next()
+       return res.status(400).send({error: 'Registration failed'})
    }
 }
 
-const authUser = async (req, res, next) => {
+const authUser = async (req, res) => {
     try {
         const { email, password } = req.body
 
@@ -41,11 +37,10 @@ const authUser = async (req, res, next) => {
 
         user.password = undefined
 
-        res.send({user, token: _generateToken({ id: user.id, name: user.name, email: user.email })})
+        return res.send({user, token: _generateToken({ id: user.id, name: user.name, email: user.email })})
     } catch(err) {
         console.log(err)
-        res.status(400).send({error: 'Some wrong request'})
-        next()
+        return res.status(400).send({error: 'Some wrong request'})
     }
 }
 

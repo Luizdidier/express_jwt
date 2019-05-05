@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const authRouter = require('./api/controllers/auth/index')
-const simpleRouter = require('./api/controllers/simple/index')
+const vendaRouter = require('./api/controllers/vendas/index')
 
 const app = express()
 
@@ -16,7 +16,7 @@ app
 
 app.use(cors(corsOptions))
 app.use('/auth', authRouter)
-app.use('/simple', simpleRouter)
+app.use('/', vendaRouter)
 
 app.listen(process.env.PORT || 3000, function(){
     console.log('Running 4000');
