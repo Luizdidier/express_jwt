@@ -18,4 +18,6 @@ app.use(cors(corsOptions))
 app.use('/auth', authRouter)
 app.use('/simple', simpleRouter)
 
-app.listen(80)
+app.listen(process.env.PORT || 3000, function(){
+    console.log('Running 4000');
+});
