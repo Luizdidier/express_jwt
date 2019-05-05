@@ -5,7 +5,7 @@ const _ = require('lodash')
 const { findUserByEmail, createUser } = require('./authDb')
 
 const _generateToken = (params = {}) => {
-    return jwt.sign(params, authConfig.secret, { expiresIn: 100 })
+    return jwt.sign(params, authConfig.secret, { expiresIn: 84600 })
 }
 
 const registerUser = async (req, res) => {
